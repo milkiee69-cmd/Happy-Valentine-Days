@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine Wonderland 💖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&family=Pacifico&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --pink-soft: #ffcad4;
+            --pink-bright: #ff8fa3;
+            --peach: #fbc4ab;
+            --cream: #fdf0d5;
+            --purple-soft: #cdb4db;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--cream);
+            overflow-x: hidden;
+            margin: 0;
+            color: #5d5d5d;
+        }
+
+        .font-pacifico { font-family: 'Pacifico', cursive; }
+        .font-baloo { font-family: 'Baloo 2', cursive; }
+
+        /* Background Animasi Hati */
+        .heart-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: var(--pink-bright);
+            opacity: 0.6;
+            animation: float 6s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Tombol Animasi */
+        .btn-bounce {
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .btn-bounce:active {
+            transform: scale(0.9);
+        }
+        .btn-bounce:hover {
+            transform: scale(1.1);
+        }
+
+        /* Memory Game Styles */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            perspective: 1000px;
+        }
+
+        .card {
+            aspect-ratio: 1;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .card-front {
+            background-color: var(--pink-bright);
+            color: white;
+        }
+
+        .card-back {
+            background-color: white;
+            transform: rotateY(180deg);
+            border: 2px solid var(--pink-soft);
+        }
+
+        .hidden { display: none; }
+
+        .bear-container {
+            filter: drop-shadow(0 10px 15px rgba(255, 143, 163, 0.3));
+            animation: bob 3s ease-in-out infinite;
+        }
+        @keyframes bob {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .fade-in {
+            animation: fadeIn 1.5s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body onload="startEverything()">
+
+    <div class="heart-bg" id="heart-container"></div>
+
+    <!-- Halaman Utama -->
+    <section id="landing-page" class="min-h-screen flex flex-col items-center justify-center p-6 text-center fade-in">
+        <div class="relative mb-8">
+            <h1 class="font-pacifico text-4xl md:text-6xl text-[#ff4d6d] drop-shadow-lg mb-4 select-none">Happy Valentine’s Day Mumudd!! 💖</h1>
+            <p class="font-baloo text-xl md:text-2xl text-[#8e7dbe] select-none">Siap untuk petualangan cinta kecil?</p>
+        </div>
+
+        <div class="bear-container w-64 h-64 md:w-80 md:h-80 mb-10 flex items-center justify-center">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="25" fill="#b08968" />
+                <circle cx="140" cy="60" r="25" fill="#b08968" />
+                <circle cx="60" cy="60" r="15" fill="#e6ccb2" />
+                <circle cx="140" cy="60" r="15" fill="#e6ccb2" />
+                <circle cx="100" cy="100" r="70" fill="#b08968" />
+                <ellipse cx="100" cy="120" rx="35" ry="25" fill="#e6ccb2" />
+                <circle cx="75" cy="95" r="6" fill="#333" />
+                <circle cx="125" cy="95" r="6" fill="#333" />
+                <path d="M95 115 Q100 110 105 115" stroke="#333" stroke-width="3" fill="none" />
+                <circle cx="65" cy="115" r="8" fill="#ffb3c1" opacity="0.6" />
+                <circle cx="135" cy="115" r="8" fill="#ffb3c1" opacity="0.6" />
+                <path d="M100 130 L115 145 L100 160 L85 145 Z" fill="#ff4d6d" />
+                <circle cx="92" cy="138" r="10" fill="#ff4d6d" />
+                <circle cx="108" cy="138" r="10" fill="#ff4d6d" />
+            </svg>
+        </div>
+
+        <button onclick="showGame()" class="btn-bounce bg-[#ff8fa3] text-white font-baloo text-2xl px-12 py-4 rounded-full shadow-lg hover:bg-[#ff4d6d] transition-all">
+            Main Game Cinta 🧸
+        </button>
+    </section>
+
+    <!-- Halaman Game (Memory Card) -->
+    <section id="game-page" class="min-h-screen hidden flex flex-col items-center justify-center p-4">
+        <div class="bg-white/80 backdrop-blur-md p-6 rounded-3xl shadow-2xl w-full max-w-md text-center">
+            <h2 class="font-pacifico text-3xl text-[#ff4d6d] mb-2">Pasangan Hati 💞</h2>
+            <p class="mb-4 text-sm font-semibold">Temukan semua pasangan untuk membuka pesan rahasia!</p>
+            
+            <div class="memory-grid" id="memory-grid">
+                <!-- Cards injected by JS -->
+            </div>
+
+            <div class="mt-6">
+                <button onclick="backToHome()" class="text-sm underline text-pink-400">Kembali</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Menang -->
+    <div id="win-modal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl transform scale-110 transition-transform">
+            <div class="text-6xl mb-4">✨</div>
+            <h3 class="font-pacifico text-3xl text-[#ff4d6d] mb-2">Yeay! Berhasil!</h3>
+            <p class="mb-6 font-baloo text-lg text-gray-600">Kamu punya ingatan yang kuat, sekuat perasaanku padamu!</p>
+            <button onclick="showMessagePage()" class="btn-bounce bg-[#cdb4db] text-white px-8 py-3 rounded-full font-bold w-full shadow-md">Buka Pesan Cinta 💌</button>
+        </div>
+    </div>
+
+    <!-- Halaman Pesan Spesial -->
+    <section id="message-page" class="min-h-screen hidden flex flex-col items-center justify-center p-6 text-center">
+        <div class="bg-white/90 p-8 md:p-12 rounded-3xl shadow-2xl max-w-2xl w-full relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-pink-100 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-purple-100 rounded-full blur-2xl"></div>
+            
+            <h2 class="font-pacifico text-4xl text-[#ff4d6d] mb-8">Pesan Spesial Untukmu...</h2>
+            
+            <div id="typing-container" class="font-baloo text-xl md:text-2xl leading-relaxed text-gray-700 min-h-[180px] p-4 select-none text-left">
+                <!-- Text typed by JS -->
+            </div>
+
+            <button onclick="backToHome()" class="mt-10 btn-bounce bg-[#ffcad4] text-[#ff4d6d] px-8 py-3 rounded-full text-sm font-bold shadow-sm">Ulangi Keajaiban ✨</button>
+        </div>
+    </section>
+
+    <script>
+        function startEverything() {
+            setInterval(createHearts, 600);
+        }
+
+        function createHearts() {
+            const container = document.getElementById('heart-container');
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.innerHTML = ['❤️','💖','✨','🌸'][Math.floor(Math.random()*4)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = Math.random() * (25 - 15) + 15 + 'px';
+            heart.style.animationDuration = Math.random() * (7 - 4) + 4 + 's';
+            container.appendChild(heart);
+            setTimeout(() => heart.remove(), 7000);
+        }
+
+        // --- Memory Game Logic ---
+        const icons = ['🐱', '🐻', '🐼', '🐰', '🐯', '🐨', '🐸', '🐷'];
+        let cards = [...icons, ...icons];
+        let flippedCards = [];
+        let matchedPairs = 0;
+
+        function showGame() {
+            document.getElementById('landing-page').classList.add('hidden');
+            document.getElementById('game-page').classList.remove('hidden');
+            setupMemoryGame();
+        }
+
+        function setupMemoryGame() {
+            const grid = document.getElementById('memory-grid');
+            grid.innerHTML = '';
+            cards.sort(() => Math.random() - 0.5);
+            flippedCards = [];
+            matchedPairs = 0;
+
+            cards.forEach((icon, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.dataset.icon = icon;
+                card.innerHTML = `
+                    <div class="card-face card-front">💖</div>
+                    <div class="card-face card-back">${icon}</div>
+                `;
+                card.onclick = () => flipCard(card);
+                grid.appendChild(card);
+            });
+        }
+
+        function flipCard(card) {
+            if (flippedCards.length < 2 && !card.classList.contains('flipped')) {
+                card.classList.add('flipped');
+                flippedCards.push(card);
+
+                if (flippedCards.length === 2) {
+                    checkMatch();
+                }
+            }
+        }
+
+        function checkMatch() {
+            const [c1, c2] = flippedCards;
+            if (c1.dataset.icon === c2.dataset.icon) {
+                matchedPairs++;
+                flippedCards = [];
+                if (matchedPairs === icons.length) {
+                    setTimeout(() => {
+                        document.getElementById('win-modal').classList.remove('hidden');
+                    }, 800);
+                }
+            } else {
+                setTimeout(() => {
+                    c1.classList.remove('flipped');
+                    c2.classList.remove('flipped');
+                    flippedCards = [];
+                }, 1000);
+            }
+        }
+
+        function backToHome() {
+            location.reload(); 
+        }
+
+        function showMessagePage() {
+            document.getElementById('win-modal').classList.add('hidden');
+            document.getElementById('game-page').classList.add('hidden');
+            document.getElementById('message-page').classList.remove('hidden');
+            
+            const fullText = "Haloo Mumudd!!\n\nSelamat yaaaw sudah menangin gamenyaa! Happy Valentinee, semoga hidupmuu penuh kasih sayang yaa! Terimakasih ya sudah lahir di dunia ini, glad to know you! I hope you know that i always by your side and i always proud of you! \n\nI Love You to the moon and back, ahaha! ✨🌙";
+            const container = document.getElementById('typing-container');
+            let i = 0;
+
+            function typeWriter() {
+                if (i < fullText.length) {
+                    container.innerHTML += fullText.charAt(i) === "\n" ? "<br>" : fullText.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 35);
+                }
+            }
+            container.innerHTML = "";
+            typeWriter();
+        }
+    </script>
+</body>
+</html>
